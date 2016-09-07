@@ -17,5 +17,6 @@ namespace Microsoft.Extensions.ProjectModel
         string PackagesDirectory { get; }
         string TargetDirectory { get; }
         string AssemblyFullPath { get; }
+        string FindProperty(string propertyName);
     }
 }
