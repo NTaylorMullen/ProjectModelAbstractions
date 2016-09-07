@@ -5,6 +5,9 @@ using System.Runtime.InteropServices;
 
 namespace Microsoft.Extensions.ProjectModel
 {
+    /// <summary>
+    /// Represents the msbuild context used to parse a project model
+    /// </summary>
     public class MsBuildContext
     {
         public string MsBuildExecutableFullPath { get; set; }

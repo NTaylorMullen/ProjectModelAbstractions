@@ -22,11 +22,6 @@ namespace Microsoft.Extensions.ProjectModel
                 throw new ArgumentNullException(nameof(configuration));
             }
 
-            if (string.IsNullOrEmpty(outputPath))
-            {
-                throw new ArgumentNullException(nameof(outputPath));
-            }
-
             _project = wrappedProject;
             _paths = wrappedProject.GetOutputPaths(configuration, /* buildBasePath: */ null, outputPath);
 

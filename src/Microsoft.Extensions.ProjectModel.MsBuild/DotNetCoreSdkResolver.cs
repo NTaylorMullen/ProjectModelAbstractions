@@ -28,14 +28,14 @@ namespace Microsoft.Extensions.ProjectModel
         /// <returns>Path to SDK root directory</returns>
         public DotNetCoreSdk ResolveLatest()
         {
-            var path = Installed.Select(d => new { path = d, version = SemanticVersion.Parse(Path.GetFileName(d)) })
+            var first = Installed.Select(d => new { path = d, version = SemanticVersion.Parse(Path.GetFileName(d)) })
                 .OrderByDescending(sdk => sdk.version)
-                .First()
-                .path;
+                .First();
 
             return new DotNetCoreSdk
             {
-                BasePath = path,
+                BasePath = first.path,
+                Version = first.version.ToFullString()
             };
         }
 

@@ -6,5 +6,6 @@ namespace Microsoft.Extensions.ProjectModel
     public class DotNetCoreSdk
     {
         public string BasePath { get; set; }
+        public string Version { get; set; }
     }
 }

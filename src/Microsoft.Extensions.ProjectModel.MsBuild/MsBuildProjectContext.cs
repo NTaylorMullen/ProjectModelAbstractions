@@ -43,7 +43,7 @@ namespace Microsoft.Extensions.ProjectModel
         private BuildResult RunDesignTimeBuild(Project project)
         {
             var projectInstance = project.CreateProjectInstance();
-            var buildRequest = new BuildRequestData(projectInstance, new[] { "Build" });
+            var buildRequest = new BuildRequestData(projectInstance, projectInstance.DefaultTargets.ToArray());
             var buildParams = new BuildParameters(project.ProjectCollection);
 
             var result = BuildManager.DefaultBuildManager.Build(buildParams, buildRequest);
