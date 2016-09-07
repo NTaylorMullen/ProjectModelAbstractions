@@ -1,0 +1,11 @@
+{
+    "version": "1.0.0-*",
+    "dependencies": {
+        "Microsoft.Extensions.ProjectModel.Abstractions": "1.0.0-*",
+        "Microsoft.DotNet.ProjectModel": "1.0.0-rc3-003121"
+    },
+    "frameworks": {
+        "net451": {},
+        "netstandard1.6": {}
+    }
+}
