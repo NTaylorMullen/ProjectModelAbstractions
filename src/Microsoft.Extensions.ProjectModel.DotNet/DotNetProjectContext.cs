@@ -67,10 +67,21 @@ namespace Microsoft.Extensions.ProjectModel
         /// Returns string values of top-level keys in the project.json file
         /// </summary>
         /// <param name="propertyName"></param>
+        /// <param name="propertyNameComparer"></param>
         /// <returns></returns>
-        public string FindProperty(string propertyName)
+        public string FindProperty(string propertyName, StringComparison propertyNameComparer)
+            => FindProperty<string>(propertyName, propertyNameComparer);
+
+        public T FindProperty<T>(string propertyName, StringComparison propertyNameComparer)
         {
-            return _jobject.Value<string>(propertyName);
+            foreach (var item in _jobject)
+            {
+                if (item.Key.Equals(propertyName, propertyNameComparer))
+                {
+                    return item.Value.Value<T>();
+                }
+            }
+            return default(T);
         }
 
         public ProjectContext Unwrap() => _project;

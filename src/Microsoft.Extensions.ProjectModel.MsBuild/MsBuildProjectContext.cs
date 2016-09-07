@@ -18,38 +18,30 @@ namespace Microsoft.Extensions.ProjectModel
 
             Configuration = configuration;
             ProjectName = name;
-            ProjectFullPath = FindProperty("ProjectPath");
-            RootNamespace = FindProperty("RootNamespace") ?? ProjectName;
-            TargetFramework = NuGetFramework.Parse(FindProperty("NuGetTargetMoniker"));
-            IsClassLibrary = FindProperty("OutputType").Equals("Library", StringComparison.OrdinalIgnoreCase);
-            TargetDirectory = FindProperty("TargetDir");
-            Platform = FindProperty("Platform");
-            AssemblyFullPath = FindProperty("TargetPath");
-            PackagesDirectory = FindProperty("NuGetPackageRoot");
-
-            // TODO get from actual properties according to TFM
-            Config = AssemblyFullPath + ".config";
-            var assemblyFileName = Path.GetFileNameWithoutExtension(AssemblyFullPath);
-            RuntimeConfigJson = Path.Combine(TargetDirectory, assemblyFileName + ".runtimeconfig.json");
-            DepsJson = Path.Combine(TargetDirectory, assemblyFileName + ".deps.json");
         }
 
-        public string FindProperty(string propertyName)
-            => _project.FindProperty(propertyName);
+        private string _assemblyFileName => Path.GetFileNameWithoutExtension(AssemblyFullPath);
 
-        public NuGetFramework TargetFramework { get; }
-        public bool IsClassLibrary { get; }
-        public string Config { get; }
-        public string DepsJson { get; }
-        public string RuntimeConfigJson { get; }
-        public string PackagesDirectory { get; }
-        public string AssemblyFullPath { get; }
+        public string FindProperty(string propertyName, StringComparison propertyNameComparer)
+            => _project.FindProperty(propertyName, propertyNameComparer);
+
         public string ProjectName { get; }
         public string Configuration { get; }
-        public string Platform { get; }
-        public string ProjectFullPath { get; }
-        public string RootNamespace { get; }
-        public string TargetDirectory { get; }
+
+        public NuGetFramework TargetFramework => NuGetFramework.Parse(this.FindProperty("NuGetTargetMoniker"));
+        public bool IsClassLibrary => this.FindProperty("OutputType").Equals("Library", StringComparison.OrdinalIgnoreCase);
+
+        // TODO get from actual properties according to TFM
+        public string Config => AssemblyFullPath + ".config";
+        public string DepsJson => Path.Combine(TargetDirectory, _assemblyFileName + ".deps.json");
+        public string RuntimeConfigJson => Path.Combine(TargetDirectory, _assemblyFileName + ".runtimeconfig.json");
+
+        public string PackagesDirectory => this.FindProperty("NuGetPackageRoot");
+        public string AssemblyFullPath => this.FindProperty("TargetPath");
+        public string Platform => this.FindProperty("Platform");
+        public string ProjectFullPath => this.FindProperty("ProjectPath");
+        public string RootNamespace => this.FindProperty("RootNamespace") ?? ProjectName;
+        public string TargetDirectory => this.FindProperty("TargetDir");
 
         public ProjectInstance Unwrap() => _project;
     }

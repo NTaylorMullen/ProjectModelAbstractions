@@ -1,4 +1,5 @@
 using NuGet.Frameworks;
+using System;
 
 namespace Microsoft.Extensions.ProjectModel
 {
@@ -17,6 +18,6 @@ namespace Microsoft.Extensions.ProjectModel
         string PackagesDirectory { get; }
         string TargetDirectory { get; }
         string AssemblyFullPath { get; }
-        string FindProperty(string propertyName);
+        string FindProperty(string propertyName, StringComparison propertyNameComparer);
     }
 }
