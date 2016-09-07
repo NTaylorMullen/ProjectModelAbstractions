@@ -1,7 +1,7 @@
 {
-    "version": "1.0.0-*",
+    "version": "0.1.0-*",
     "dependencies": {
-        "Microsoft.Extensions.ProjectModel.Abstractions": "1.0.0-*",
+        "Microsoft.Extensions.ProjectModel.Abstractions": "0.1.0-*",
         "Microsoft.Build": "0.1.0-*",
         "Microsoft.Build.Framework": "0.1.0-*",
         "Microsoft.DotNet.Cli.Utils": "1.0.0-preview2-003121",
