@@ -5,5 +5,5 @@ Declarative abstractions around .NET project model systems. Provides API designe
 
 Current implementations:
 
- - Microsoft.DotNet.ProjectModle (aka 'project.json', the project model in .NET Core SDK preview 2)
+ - Microsoft.DotNet.ProjectModel (aka 'project.json', the project model in .NET Core SDK preview 2)
  - MSBuild
