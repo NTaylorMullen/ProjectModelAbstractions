@@ -4,6 +4,8 @@ using Microsoft.DotNet.ProjectModel;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NuGet.Frameworks;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Microsoft.Extensions.ProjectModel
 {
@@ -12,7 +14,8 @@ namespace Microsoft.Extensions.ProjectModel
         private readonly ProjectContext _project;
         private readonly OutputPaths _paths;
         private readonly bool _isExecutable;
-        private readonly JObject _jobject;
+        private readonly JObject _rawProject;
+        private readonly CommonCompilerOptions _compilerOptions;
 
         public DotNetProjectContext(ProjectContext wrappedProject, string configuration, string outputPath)
         {
@@ -30,7 +33,7 @@ namespace Microsoft.Extensions.ProjectModel
             using (var streamReader = new StreamReader(stream))
             using (var jsonReader = new JsonTextReader(streamReader))
             {
-                _jobject = JObject.Load(jsonReader);
+                _rawProject = JObject.Load(jsonReader);
             }
             _project = wrappedProject;
             _paths = wrappedProject.GetOutputPaths(configuration, /* buildBasePath: */ null, outputPath);
@@ -38,6 +41,8 @@ namespace Microsoft.Extensions.ProjectModel
             // Workaround https://github.com/dotnet/cli/issues/3164
             _isExecutable = wrappedProject.ProjectFile.GetCompilerOptions(wrappedProject.TargetFramework, configuration).EmitEntryPoint
                             ?? wrappedProject.ProjectFile.GetCompilerOptions(null, configuration).EmitEntryPoint.GetValueOrDefault();
+
+            _compilerOptions = _project.ProjectFile.GetCompilerOptions(TargetFramework, Configuration);
 
             Configuration = configuration;
         }
@@ -61,7 +66,7 @@ namespace Microsoft.Extensions.ProjectModel
         // TODO read from xproj if available
         public string RootNamespace => _project.ProjectFile.Name;
         public string TargetDirectory => _paths.RuntimeOutputPath;
-        public string Platform => _project.ProjectFile.GetCompilerOptions(TargetFramework, Configuration).Platform;
+        public string Platform => _compilerOptions.Platform;
 
         /// <summary>
         /// Returns string values of top-level keys in the project.json file
@@ -74,7 +79,7 @@ namespace Microsoft.Extensions.ProjectModel
 
         public T FindProperty<T>(string propertyName, StringComparison propertyNameComparer)
         {
-            foreach (var item in _jobject)
+            foreach (var item in _rawProject)
             {
                 if (item.Key.Equals(propertyName, propertyNameComparer))
                 {
@@ -83,6 +88,11 @@ namespace Microsoft.Extensions.ProjectModel
             }
             return default(T);
         }
+
+        public IEnumerable<string> CompilationItems 
+            => _compilerOptions.CompileInclude.ResolveFiles();
+        public IEnumerable<string> EmbededItems
+            => _compilerOptions.EmbedInclude.ResolveFiles();
 
         public ProjectContext Unwrap() => _project;
     }

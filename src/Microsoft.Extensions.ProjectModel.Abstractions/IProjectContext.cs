@@ -1,5 +1,6 @@
-using NuGet.Frameworks;
 using System;
+using System.Collections.Generic;
+using NuGet.Frameworks;
 
 namespace Microsoft.Extensions.ProjectModel
 {
@@ -19,5 +20,7 @@ namespace Microsoft.Extensions.ProjectModel
         string TargetDirectory { get; }
         string AssemblyFullPath { get; }
         string FindProperty(string propertyName, StringComparison propertyNameComparer);
+        IEnumerable<string> CompilationItems { get; }
+        IEnumerable<string> EmbededItems { get; }
     }
 }

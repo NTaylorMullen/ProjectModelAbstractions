@@ -4,23 +4,21 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Microsoft.DotNet.Cli.Utils;
 using NuGet.Versioning;
 
-namespace Microsoft.Extensions.ProjectModel
+namespace Microsoft.Extensions.ProjectModel.Internal
 {
-    public class DotNetSdkResolver
+    internal class DotNetSdkResolver
     {
         private readonly string _installationPath;
-
-        public DotNetSdkResolver()
-            : this(Path.GetDirectoryName(new Muxer().MuxerPath))
-        { }
 
         public DotNetSdkResolver(string installationDir)
         {
             _installationPath = installationDir;
         }
+
+        private IEnumerable<string> Installed
+            => Directory.EnumerateDirectories(Path.Combine(_installationPath, "sdk"));
 
         /// <summary>
         /// Find the latest SDK installation (according to SemVer 1.0)
@@ -39,11 +37,8 @@ namespace Microsoft.Extensions.ProjectModel
             };
         }
 
-        // TODO resolve from the version selected in global.json
-        // public string ResolveProjectSdk();
-
-        public IEnumerable<string> Installed
-            => Directory.EnumerateDirectories(Path.Combine(_installationPath, "sdk"));
+        // TODO look at global.json
+        public DotNetCoreSdk ResolveProjectSdk() => ResolveLatest();
     }
 
 }
