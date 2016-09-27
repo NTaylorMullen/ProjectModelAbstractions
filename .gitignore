@@ -29,3 +29,5 @@ project.lock.json
 .build/
 .vscode/
 /.vs/
+*.nuget.props
+*.nuget.targets

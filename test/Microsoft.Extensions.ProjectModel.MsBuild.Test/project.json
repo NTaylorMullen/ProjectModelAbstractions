@@ -1,18 +1,21 @@
 {
+  "buildOptions": {
+    "warningsAsErrors": true
+  },
   "dependencies": {
     "dotnet-test-xunit": "2.2.0-*",
     "Microsoft.Extensions.ProjectModel.MsBuild": "0.1.0-*",
-    "xunit":  "2.2.0-*"
+    "xunit": "2.2.0-*"
   },
-    "frameworks": {
-        "netcoreapp1.0":{
-            "dependencies": {
-                "Microsoft.NETCore.App": {
-                    "version": "1.0.0",
-                    "type": "platform"
-                }
-            }
+  "frameworks": {
+    "netcoreapp1.0": {
+      "dependencies": {
+        "Microsoft.NETCore.App": {
+          "version": "1.0.0",
+          "type": "platform"
         }
-    },
-    "testRunner": "xunit"
+      }
+    }
+  },
+  "testRunner": "xunit"
 }

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Microsoft.Extensions.ProjectModel.MsBuild.Test
 {
-    internal class TemporaryFileProvider : PhysicalFileProvider, IDisposable
+    internal class TemporaryFileProvider : PhysicalFileProvider
     {
         public TemporaryFileProvider()
             :base(Directory.CreateDirectory(Path.Combine(Path.GetTempPath(), "pmtests", Guid.NewGuid().ToString())).FullName)
@@ -17,7 +17,7 @@ namespace Microsoft.Extensions.ProjectModel.MsBuild.Test
             File.WriteAllText(Path.Combine(this.Root, filename), contents, Encoding.UTF8);
         }
 
-        public void Dispose()
+        public new void Dispose()
         {
             base.Dispose();
             Directory.Delete(this.Root, recursive: true);

@@ -14,14 +14,16 @@ namespace Microsoft.Extensions.ProjectModel
         public string ExtensionsPath { get; set; }
 
         public static MsBuildContext FromDotNetSdk()
-            => FromDotNetSdk(sdkInstallationPath: Path.GetDirectoryName(new Muxer().MuxerPath));
+            => FromDotNetSdk(dotnetInstallationPath: Path.GetDirectoryName(new Muxer().MuxerPath));
 
-        internal static MsBuildContext FromDotNetSdk(string sdkInstallationPath)
+        internal static MsBuildContext FromDotNetSdk(string dotnetInstallationPath)
         {
-            var sdk = new DotNetSdkResolver(sdkInstallationPath).ResolveProjectSdk();
-            var msBuildFile = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
-                ? "MSBuild.exe"
-                : "MSBuild";
+            var sdk = new DotNetSdkResolver(dotnetInstallationPath).ResolveProjectSdk();
+            // Despite what you may think, you need the ".exe" even on Linux.
+            // var msBuildFile = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
+            //     ? "MSBuild.exe"
+            //     : "MSBuild";
+            var msBuildFile = "MSBuild.exe";
 
             return new MsBuildContext
             {

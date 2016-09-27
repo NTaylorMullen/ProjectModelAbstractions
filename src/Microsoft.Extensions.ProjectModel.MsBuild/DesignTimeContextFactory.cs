@@ -26,7 +26,11 @@ namespace Microsoft.Extensions.ProjectModel
             _msbuildContext = context;
             _fileProvider = fileProvider;
 
-            // workaround https://github.com/Microsoft/msbuild/issues/999
+            /*
+            Workaround https://github.com/Microsoft/msbuild/issues/999
+            Error: System.TypeInitializationException : The type initializer for 'BuildEnvironmentHelperSingleton' threw an exception.
+            Could not determine a valid location to MSBuild. Try running this process from the Developer Command Prompt for Visual Studio.
+            */
             Environment.SetEnvironmentVariable("MSBUILD_EXE_PATH", context.MsBuildExecutableFullPath);
         }
 
@@ -86,7 +90,7 @@ namespace Microsoft.Extensions.ProjectModel
             {
                 var xmlReader = XmlReader.Create(stream);
 
-                var xml = ProjectRootElement.Create(xmlReader, projectCollection);
+                var xml = ProjectRootElement.Create(xmlReader, projectCollection, preserveFormatting: true);
                 xml.FullPath = fileInfo.PhysicalPath;
 
                 return new Project(xml, globalProperties, /*toolsVersion:*/ null, projectCollection);

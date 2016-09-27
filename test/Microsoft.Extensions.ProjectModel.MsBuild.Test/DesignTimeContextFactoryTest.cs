@@ -47,6 +47,7 @@ namespace Microsoft.Extensions.ProjectModel.MsBuild.Test
 
                 var factory = new MsBuildDesignTimeContextFactory(testContext, fileProvider);
                 var expectedCompileItems = new[] { "One.cs", "Two.cs" }.Select(p => Path.Combine(fileProvider.Root, p)).ToArray();
+                
                 //act
                 var context = (MsBuildProjectContext)factory.Create("test.csproj", "Debug");
 
